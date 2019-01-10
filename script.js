@@ -47,7 +47,8 @@ $("#file").change(function() {
             t += "<tr>" +
             "<td>" + v["title"]  + "</td>" +
             "<td>" + v["qty"]  + "</td>" +
-            "<td>" + v["sum"]  + "</td>" +
+            "<td>$" + v["sum"].toFixed(2)  + "</td>" +
+            "<td>$" + (v["sum"]*0.88).toFixed(2)  + "</td>" +
             "</tr>";
         }
         $("#sumlist").html(t);
