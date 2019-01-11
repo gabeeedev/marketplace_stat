@@ -101,11 +101,36 @@ function listBetween() {
             "</tr>";
         }
         $("#sumlist").html(t);
-}
 
+        slices = [];
+        labels = [];
+        for(k in data) {
+            v = data[k];
+            slices.push(v["sum"]);
+            labels.push(v["title"]);
+        }
+
+        console.log(labels);
+
+        var ctx = $("#test");
+        var test = new Chart(ctx,{
+            type: 'pie',
+            data: {
+                datasets:[{
+                    data:slices  
+                }]
+            },
+            labels:labels
+        });
+}
 // $(document).ready(function() {
-//     $("#from").datepicker({
-//         "dateFormat":"yy-mm-dd"
-//     });
-//     $("#to").datepicker();
+//     var ctx = $("#test");
+//         var test = new Chart(ctx,{
+//             type: 'pie',
+//             data: {
+//                 datasets:[{
+//                     data:[3,4,5,6]  
+//                 }]
+//             }
+//         });
 // });
