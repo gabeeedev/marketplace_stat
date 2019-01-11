@@ -1,3 +1,8 @@
+var fileData = [];
+
+var minDate;
+var maxDate;
+
 $("#file").change(function() {
     var reader = new FileReader();
     reader.onload = function(){
@@ -17,26 +22,70 @@ $("#file").change(function() {
                 "qty":parseInt(row[3]),
                 "sum":parseFloat(row[4].slice(1))
             };
-            if(row["title"] in data) {
-                data[row["title"]]["list"].push(row);
-                data[row["title"]]["qty"] += row["qty"];
-                data[row["title"]]["sum"] += row["sum"];
+            fileData.push(row);
+        });
+
+        minDate = new Date(fileData["0"]["date"]);
+        maxDate = new Date(fileData[fileData.length-1]["date"]);
+    
+        $(".datepicker").datepicker({
+            "dateFormat":"yy-mm-dd",
+            "minDate": minDate, 
+            "maxDate": maxDate
+        });
+        $("#from").datepicker("option", "defaultDate", minDate);
+        $("#to").datepicker("option", "defaultDate", maxDate);
+
+        listBetween();
+
+    };
+    reader.readAsText($("#file").prop("files")[0]);
+});
+
+$("#from").change(function() {
+    t = new Date($(this).val());
+    $("#to").datepicker("option", "minDate", t);
+    listBetween();
+});
+
+$("#to").change(function() {
+    t = new Date($(this).val());
+    $("#from").datepicker("option", "maxDate", t);
+    listBetween();
+});
+
+function listBetween() {
+        var from = new Date($("#from").val());
+        var to = new Date($("#to").val());
+
+        var t = "";
+        data = [];
+        for(var k in fileData) {
+            var v = fileData[k];
+            var cur = new Date(v.date);
+            if(from > cur || cur > to) {
+                continue;
+            }
+            if(v["title"] in data) {
+                data[v["title"]]["list"].push(v);
+                data[v["title"]]["qty"] += v["qty"];
+                data[v["title"]]["sum"] += v["sum"];
             } else {
-                data[row["title"]] = {
-                    "title":row["title"],
-                    "qty":row["qty"],
-                    "sum":row["sum"],
-                    "list":[row]
+                data[v["title"]] = {
+                    "title":v["title"],
+                    "qty":v["qty"],
+                    "sum":v["sum"],
+                    "list":[v]
                 };
             }
             
             t += 
             "<tr>" + 
-            v.split(",")
-                .map(x => {return "<td>" + x.slice(1,-1) + "</td>";})
+            Object.values(v)
+                .map(x => {return "<td>" + x + "</td>";})
                 .join("")
             + "</tr>";
-        });
+        }
         $("#list").html(t);
 
         t = "";
@@ -52,6 +101,11 @@ $("#file").change(function() {
             "</tr>";
         }
         $("#sumlist").html(t);
-    };
-    reader.readAsText($("#file").prop("files")[0]);
-});
+}
+
+// $(document).ready(function() {
+//     $("#from").datepicker({
+//         "dateFormat":"yy-mm-dd"
+//     });
+//     $("#to").datepicker();
+// });
