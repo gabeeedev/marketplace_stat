@@ -20,6 +20,16 @@
         <div class="col-6">From : <input type="text" class="datepicker" id="from"></div>
         <div class="col-6">To : <input type="text" class="datepicker" id="to"></div>
     </div>
+    <div class="btn-group btn-block">
+        <button type="button" interval=0 class="datesetter btn btn-primary">Today</button>
+        <button type="button" interval=1 class="datesetter btn btn-primary">Last day</button>
+        <button type="button" interval=7 class="datesetter btn btn-primary">Last 7 days</button>
+        <button type="button" interval=30 class="datesetter btn btn-primary">Last 30 days</button>
+        <button type="button" interval=90 class="datesetter btn btn-primary">Last 90 days</button>
+        <button type="button" interval=365 class="datesetter btn btn-primary">Last 365 days</button>
+        <button type="button" interval=10000 class="datesetter btn btn-primary">Full</button>
+    </div>
+    <h2>Summary</h2>
     <table class="table">
         <thead>
         <tr>
@@ -32,10 +42,23 @@
         <tbody id="sumlist">
 
         </tbody>
+        <tfoot id="sumlistsum">
+
+        </tfoot>
     </table>
 
-    <canvas id="test" style="height:400px;"></canvas>   
-
+    <div class="chartdiv"><canvas id="pie_chart"></canvas></div>
+    <div class="btn-group btn-block">
+        <button type="button" interval=1 class="intervalsetter btn btn-primary">Days</button>
+        <button type="button" interval=7 class="intervalsetter btn btn-primary">Weeks</button>
+        <button type="button" interval=30 class="intervalsetter btn btn-primary">Months</button>
+        <button type="button" interval=90 class="intervalsetter btn btn-primary">Quarters</button>
+        <button type="button" interval=365 class="intervalsetter btn btn-primary">Years</button>
+    </div>
+    <div class="chartdiv"><canvas id="line_chart"></canvas></div>
+    <div class="chartdiv"><canvas id="line_chart_sum"></canvas></div>
+    <!-- <div class="chartdiv"><canvas id="pie_chart"></canvas></div> -->
+    <h2>Sales</h2>
     <table class="table">
         <thead>
             <th style="width:25%;">Date</th>
@@ -50,7 +73,6 @@
     </table>
 </body>
 
-<script src="p5.js"></script>
 <script src="jquery-3.3.1.min.js"></script>
 <script src="jquery-ui.min.js"></script>
 <script src="bootstrap.min.js"></script>

@@ -1,6 +1,15 @@
 body {
-    padding:64px 20%;
+    padding:64px 10%;
 }
 .table {
     margin-bottom:96px;
+    margin-top:32px;
+}
+.chartdiv {
+    width:80%;
+    margin:16px auto;
+}
+h2 {
+    text-align: center;
+    margin:32px;
 }
