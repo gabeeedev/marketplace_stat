@@ -32,7 +32,10 @@ $("#file").change(function() {
         $(".datepicker").datepicker({
             "dateFormat":"yy-mm-dd",
             "minDate": minDate, 
-            "maxDate": maxDate
+            "maxDate": maxDate,
+            changeMonth: true,
+            changeYear: true
+            
         });
         $("#from").datepicker("setDate", minDate);
         $("#to").datepicker("setDate", maxDate);
@@ -69,7 +72,7 @@ var charts = [];
 function listBetween() {
     var from = new Date($("#from").val());
     var to = new Date($("#to").val());
-
+    summary = [];
     var t = "";
     for(var k in fileData) {
         var v = fileData[k];
