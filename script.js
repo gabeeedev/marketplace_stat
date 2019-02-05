@@ -4,6 +4,12 @@ var summary = [];
 var minDate;
 var maxDate;
 
+// var last = {
+//     from:minDate,
+//     to:maxDate,
+//     interval
+// }
+
 $("#file").change(function() {
     var reader = new FileReader();
     reader.onload = function(){
@@ -40,7 +46,7 @@ $("#file").change(function() {
         $("#from").datepicker("setDate", minDate);
         $("#to").datepicker("setDate", maxDate);
 
-        listBetween();
+        getData();
 
     };
     reader.readAsText($("#file").prop("files")[0]);
@@ -49,13 +55,13 @@ $("#file").change(function() {
 $("#from").change(function() {
     t = new Date($(this).val());
     $("#to").datepicker("option", "minDate", t);
-    listBetween();
+    getData();
 });
 
 $("#to").change(function() {
     t = new Date($(this).val());
     $("#from").datepicker("option", "maxDate", t);
-    listBetween();
+    getData();
 });
 
 $(".datesetter").click(function() {
@@ -65,11 +71,10 @@ $(".datesetter").click(function() {
     min.setDate(min.getDate()-interval);
     $("#from").datepicker("setDate", min);
     $("#to").datepicker("setDate", max);
-    listBetween();
+    getData();
 });
 
-var charts = [];
-function listBetween() {
+function getData() {
     var from = new Date($("#from").val());
     var to = new Date($("#to").val());
     summary = [];
@@ -89,7 +94,8 @@ function listBetween() {
                 "title":v["title"],
                 "qty":v["qty"],
                 "sum":v["sum"],
-                "list":[v]
+                "list":[v],
+                "visible":true
             };
         }
         
@@ -104,12 +110,40 @@ function listBetween() {
     }
     $("#list").html(t);
 
+    t = [];
+    for(k in summary) {
+        t.push(summary[k]);
+    }
+    summary = t;
+
+    getVisual();
+}
+
+function generalCompare(a,b,dir) {
+    return a<b?-dir:dir;
+}
+
+$(".sort").click(function() {
+    var dir = $(this).attr("sort-dir");
+    var data = $(this).attr("sort-data");
+    summary.sort((a,b) => generalCompare(a[data],b[data],dir=="asc"?1:-1));
+
+    $(this).attr("sort-dir",dir=="asc"?"desc":"asc");
+    $(this).removeClass(dir=="asc"?"fa-sort-up":"fa-sort-down");
+    $(this).addClass(dir=="asc"?"fa-sort-down":"fa-sort-up");
+
+    getVisual();
+});
+
+var charts = [];
+function getVisual() {
     t = "";
     // console.log(summary);
     for(k in summary)
     {
         v = summary[k];
         t += "<tr>" +
+        "<td><input type='checkbox' class='checker' " + (v['visible']?'checked':'') + " tar='" + k + "'></td>" + 
         "<td>" + v["title"]  + "</td>" +
         "<td>" + v["qty"]  + "</td>" +
         "<td>$" + v["sum"].toFixed(2)  + "</td>" +
@@ -121,6 +155,7 @@ function listBetween() {
     slices = [];
     labels = [];
     for(k in summary) {
+        if(summary[k] != undefined && summary[k]["visible"] == false) continue;
         v = summary[k];
         slices.push(v["sum"].toFixed(2));
         labels.push(v["title"]);
@@ -150,6 +185,19 @@ function listBetween() {
         
     }));
     refreshLines(30);
+
+    $(".checker").change(function() {
+        var tar = $(this).attr("tar");
+        var checked = $(this).prop("checked");
+        console.log(checked);
+        if(tar == "all") {
+            summary.forEach(x => x["visible"] = checked);
+        } else {
+            console.log(tar);
+            summary[tar]["visible"] = checked;
+        }
+        getVisual();
+    });
 }
 
 $(".intervalsetter").click(function() {
@@ -161,6 +209,8 @@ var lineChart;
 var lineChartSum;
 
 function refreshLines(days) {
+
+    filtered = summary.filter(x => x["visible"]);
 
     start = new Date($("#from").val());
     end = new Date($("#to").val());
@@ -181,32 +231,34 @@ function refreshLines(days) {
     labels.reverse();
     datasets = [];
     datasets2 = [];
-    var i = 0;
-    var cols = getCircleColors(Object.keys(summary).length);
+    var cols = getCircleColors(filtered.length);
     indexes = [];
-    for(var k in summary) {
+    for(var k in filtered) {
         datasets.push({
-            label:k,
+            label:filtered[k]["title"],
             data:Array(labels.length).fill(0),
-            borderColor:cols[i],
+            borderColor:cols[k],
             fill:false
         })
 
         datasets2.push({
-            label:k,
+            label:filtered[k]["title"],
             data:Array(labels.length).fill(0),
-            borderColor:cols[i],
+            borderColor:cols[k],
             fill:false
         })
 
-        indexes[k] = i;
-        i++;
+        indexes[filtered[k]["title"]] = k;
     }
 
     i = 0;
     summer = Array(cols.length).fill(0);
     for(var k in fileData) {
         var v = fileData[k];
+        
+        if(!(v["title"] in indexes)) {
+            continue;
+        }
 
         if(v["date"] < start) 
             continue;

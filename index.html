@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="bootstrap.min.css">
     <link rel="stylesheet" href="jquery-ui.min.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 </head>
 <body>
     <div class="input-group mb-3">
@@ -33,10 +34,11 @@
     <table class="table">
         <thead>
         <tr>
-            <th style="width:50%;">Title</th>
-            <th style="width:10%;">Qty</th>
-            <th style="width:20%;">Sum</th>
-            <th style="width:20%;">Revenue</th>
+            <th style="width:10%;"><input type="checkbox" class="checker" checked tar="all"></th>
+            <th style="width:50%;">Title <i class="fas fa-sort-up sort" sort-dir="asc" sort-data="title"></i></th>
+            <th style="width:10%;">Qty <i class="fas fa-sort-up sort" sort-dir="asc" sort-data="qty"></i></th>
+            <th style="width:15%;">Sum <i class="fas fa-sort-up sort" sort-dir="asc" sort-data="sum"></i></th>
+            <th style="width:15%;">Revenue</th>
             </tr>
         </thead>
         <tbody id="sumlist">

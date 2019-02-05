@@ -13,3 +13,8 @@ h2 {
     text-align: center;
     margin:32px;
 }
+.checker {
+    width:18px;
+    height: 18px;
+    vertical-align: middle;
+}
