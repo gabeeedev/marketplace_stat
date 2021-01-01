@@ -139,6 +139,8 @@ var charts = [];
 function getVisual() {
     t = "";
     // console.log(summary);
+    total = 0;
+    totalqty = 0;
     for(k in summary)
     {
         v = summary[k];
@@ -149,8 +151,20 @@ function getVisual() {
         "<td>$" + v["sum"].toFixed(2)  + "</td>" +
         "<td>$" + (v["sum"]*0.88).toFixed(2)  + "</td>" +
         "</tr>";
+
+        total += v["sum"];
+        totalqty += v["qty"];
     }
     $("#sumlist").html(t);
+
+    t = "<td></td>" + 
+    "<td>Sum</td>" +
+    "<td>" + totalqty + "</td>" +
+    "<td>$" + total.toFixed(2)  + "</td>" +
+    "<td>$" + (total*0.88).toFixed(2)  + "</td>" +
+    "</tr>";
+
+    $("#sumlistsum").html(t);
 
     slices = [];
     labels = [];

@@ -18,3 +18,12 @@ h2 {
     height: 18px;
     vertical-align: middle;
 }
+
+thead {
+    font-size:18px;
+}
+
+tfoot {
+    font-size:18px;
+    font-weight: bold;
+}
